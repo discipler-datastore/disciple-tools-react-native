@@ -14,6 +14,7 @@ A basic react native app with for accessing [Disciple Tools](https://disciple.to
   
 #### 2) Add `Google Services` files (plist & JSON)
 
+- 2.0) **Existing files** If someone has already generated theses files, follow `2.2` and `2.4` to copy them into your project.
 - 2.1) **[iOS]** Follow the `add firebase to your app` instructions [here](https://firebase.google.com/docs/ios/setup#add_firebase_to_your_app) to generate your `GoogleService-Info.plist` file if you haven't done so already - use the package name generated previously as your `iOS bundle ID`.
 - 2.2) **[iOS]** Place this file in the `ios/` directory of your project.
 - 2.3) **[Android]** Follow the `manually add firebase` to your app instructions [here](https://firebase.google.com/docs/android/setup#manually_add_firebase) to generate your `google-services.json` file if you haven't done so already - use the package name generated previously as your `Android package name`.
