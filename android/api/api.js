@@ -1,1 +1,15 @@
-// Contacts api
+class DiscipleAPI {
+
+    getToken() {
+        
+    }
+    
+    getAllContacts() {
+
+    }
+
+    getContactById() {
+
+    }
+    
+}
