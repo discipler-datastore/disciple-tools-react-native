@@ -39,6 +39,7 @@ export default class DataStore {
         contactsArray = dataJson["contacts"];
         contactsArray.forEach(contactJson => {
             contacts.push({
+                key: contactJson["ID"],
                 name: contactJson["post_title"],
                 status: contactJson["overall_status"],
                 seekerPath: contactJson["seeker_path"],
@@ -52,8 +53,7 @@ export default class DataStore {
         return contacts;
     }
 
-    static async getContactByIdAsync(authToken, contactId) {
-        // TODO: Finish implementing.
+    static async getContactByIdAsync(authToken, contactName, contactId) {
         const response = await fetch(DataStore.base_url + "/wp-json/dt/v1/contact/" + contactId.toString(), {
             method: 'GET',
             headers: {
@@ -62,7 +62,16 @@ export default class DataStore {
             }
         });
 
-        const dataJson = JSON.parse(response);
-        return dataJson["token"];
+        const contactJson = await response.json();
+
+        return {
+            name: contactName, 
+            comments: contactJson["comments"].map(comment => {
+                return {
+                    author: comment["comment_author"],
+                    content: comment["comment_content"]
+                };
+            })
+        };
     }
 }

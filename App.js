@@ -13,68 +13,75 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
+        await getToken();
+        await this.getAllContacts();
+    }
+
+    async getToken() {
         const token = await DataStore.getTokenAsync({
             username: "eg",
             password: "worthyisthelamb"
         });
         this.token = token;
+    }
 
+    async getAllContacts() {
         const contacts = await DataStore.getAllContactsAsync(this.token);
         this.contacts = contacts;
 
         this.forceUpdate();
-        // TODO: You: Do firebase things
-        // const { user } = await firebase.auth().signInAnonymously();
-        // console.warn('User -> ', user.toJSON());
+    }
 
-        // await firebase.analytics().logEvent('foo', { bar: '123'});
+    async getContact(contactName, contactId) {
+        const contacts = await DataStore.getContactByIdAsync(this.token, contactName, contactId);
+        this.contacts = contacts;
+
+        this.forceUpdate();
+    }
+
+    renderAllContacts(item) {
+        return (
+            <View style={styles.itemContainer}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.subtitle}>Location: {item.locations && item.locations.length ? item.locations.join(", ") : "unknown"}</Text>
+                <Text style={styles.subtitle}>Status: {item.status}</Text>
+            </View>
+        );
+    }
+
+    renderContactComment(comment) {
+        return (
+            <View style={styles.itemContainer}>
+                <Text style={styles.title}>Author: {comment.author}</Text>
+                <Text style={styles.subtitle}>Comment: {comment.content} </Text>
+            </View>
+        );
+    }
+
+    renderContact(contact) {
+        return (
+            <View style={styles.itemContainer}>
+                <Text style={styles.title}>Name: {contact.name}</Text>
+                <ScrollView>
+                <FlatList
+                    data={contact.comments}
+                    renderItem={({item}) => this.renderContactComment(item)}
+                />
+                </ScrollView>
+            </View>
+        );
     }
 
     render() {
         return (
             <ScrollView>
+            <Text/>
+            <Text style={styles.welcome}>Find A Disciple</Text>
             <FlatList
                 data={this.contacts}
-                renderItem={({item}) => <Text style={styles.modules}>{item["name"]}</Text>}
+                renderItem={({item}) => this.renderContact(this.getContact("Nina Kalb", 67))}
+                // renderItem={({item}) => this.renderAllContacts(item)}
             />
-            {/* <View style={styles.container}>
-                <Image source={require('./assets/ReactNativeFirebase.png')} style={[styles.logo]}/>
-                <Text style={styles.welcome}>
-                Welcome to {'\n'} React Native Firebase
-                </Text>
-                <Text style={styles.instructions}>
-                To get started, edit App.js
-                </Text>
-                {Platform.OS === 'ios' ? (
-                <Text style={styles.instructions}>
-                    Press Cmd+R to reload,{'\n'}
-                    Cmd+D or shake for dev menu
-                </Text>
-                ) : (
-                <Text style={styles.instructions}>
-                    Double tap R on your keyboard to reload,{'\n'}
-                    Cmd+M or shake for dev menu
-                </Text>
-                )}
-                <View style={styles.modules}>
-                <Text style={styles.modulesHeader}>The following Firebase modules are pre-installed:</Text>
-                {firebase.admob.nativeModuleExists && <Text style={styles.module}>admob()</Text>}
-                {firebase.analytics.nativeModuleExists && <Text style={styles.module}>analytics()</Text>}
-                {firebase.auth.nativeModuleExists && <Text style={styles.module}>auth()</Text>}
-                {firebase.config.nativeModuleExists && <Text style={styles.module}>config()</Text>}
-                {firebase.crashlytics.nativeModuleExists && <Text style={styles.module}>crashlytics()</Text>}
-                {firebase.database.nativeModuleExists && <Text style={styles.module}>database()</Text>}
-                {firebase.firestore.nativeModuleExists && <Text style={styles.module}>firestore()</Text>}
-                {firebase.functions.nativeModuleExists && <Text style={styles.module}>functions()</Text>}
-                {firebase.iid.nativeModuleExists && <Text style={styles.module}>iid()</Text>}
-                {firebase.invites.nativeModuleExists && <Text style={styles.module}>invites()</Text>}
-                {firebase.links.nativeModuleExists && <Text style={styles.module}>links()</Text>}
-                {firebase.messaging.nativeModuleExists && <Text style={styles.module}>messaging()</Text>}
-                {firebase.notifications.nativeModuleExists && <Text style={styles.module}>notifications()</Text>}
-                {firebase.perf.nativeModuleExists && <Text style={styles.module}>perf()</Text>}
-                {firebase.storage.nativeModuleExists && <Text style={styles.module}>storage()</Text>}
-                </View>
-            </View> */}
             </ScrollView>
         );
     }
@@ -115,5 +122,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 4,
         textAlign: 'center',
+    },
+    itemContainer: {
+        margin: 20,
+        backgroundColor: '#0d97a6',
+        padding: 5,
+        borderRadius: 10
+    },
+    title: {
+        color: "#ffffff",
+        fontSize: 24
+    },
+    subtitle: {
+        color: "#ffffff",
+        fontSize: 18
     }
 });
