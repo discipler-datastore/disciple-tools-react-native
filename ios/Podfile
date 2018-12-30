@@ -11,6 +11,7 @@ target 'DiscipleToolsMobile' do
   pod 'Firebase/Core', '~> 5.9.0'
 
   # [OPTIONAL PODS] - comment out pods for firebase products you won't be using.
+  pod 'GoogleAppMeasurement', '~> 5.2.0'
   # pod 'Firebase/AdMob', '~> 5.9.0'
   pod 'Firebase/Auth', '~> 5.9.0'
   # pod 'Firebase/Database', '~> 5.9.0'
