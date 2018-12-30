@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
+
+import { StyleSheet, Platform, Image, Text, View, ScrollView, FlatList } from 'react-native';
+import DataStore from './api/DataStore';
 
 import firebase from 'react-native-firebase';
 
@@ -7,9 +9,18 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {};
+    this.token = "";
   }
 
   async componentDidMount() {
+    const token = await DataStore.getTokenAsync({
+        username: "eg",
+        password: "worthyisthelamb"
+    });
+    this.token = token;
+
+    const contacts = await DataStore.getAllContactsAsync(this.token);
+    this.contacts = contacts;
     // TODO: You: Do firebase things
     // const { user } = await firebase.auth().signInAnonymously();
     // console.warn('User -> ', user.toJSON());
@@ -20,7 +31,13 @@ export default class App extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View style={styles.container}>
+        <Text style={styles.welcome}>test textAlign</Text>
+        <FlatList
+          data={this.contact}
+          renderItem={({contact}) => <Text style={styles.modules}>{contact.name}</Text>}
+        />
+        <Text style={styles.welcome}>test textAlign</Text>
+        {/* <View style={styles.container}>
           <Image source={require('./assets/ReactNativeFirebase.png')} style={[styles.logo]}/>
           <Text style={styles.welcome}>
             Welcome to {'\n'} React Native Firebase
@@ -57,7 +74,7 @@ export default class App extends React.Component {
             {firebase.perf.nativeModuleExists && <Text style={styles.module}>perf()</Text>}
             {firebase.storage.nativeModuleExists && <Text style={styles.module}>storage()</Text>}
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     );
   }

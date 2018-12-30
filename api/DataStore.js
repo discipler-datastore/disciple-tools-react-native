@@ -1,15 +1,15 @@
 import fetch from 'react-native';
 
-export class DataStore {
+export default class DataStore {
     static base_url = 'http://mobfup.wpdevcloud.com';
 
     static async getTokenAsync(config) {
-        const response = await fetch(base_url + "/wp-json/jwt-auth/v1/token", {
+        const response = await fetch(DataStore.base_url + "/wp-json/jwt-auth/v1/token", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: json.stringify({
+            body: JSON.stringify({
                 username: config.username,
                 password: config.password
             })
@@ -20,7 +20,7 @@ export class DataStore {
     }
     
     static async getAllContactsAsync(authToken) {
-        const response = await fetch(base_url + "/wp-json/dt/v1/contacts", {
+        const response = await fetch(DataStore.base_url + "/wp-json/dt/v1/contacts", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export class DataStore {
 
     static async getContactByIdAsync(authToken, contactId) {
         // TODO: Finish implementing.
-        const response = await fetch(base_url + "/wp-json/dt/v1/contact/" + contactId.toString(), {
+        const response = await fetch(DataStore.base_url + "/wp-json/dt/v1/contact/" + contactId.toString(), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
